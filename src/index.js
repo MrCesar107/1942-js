@@ -16,11 +16,17 @@ function main() {
 }
 
 function animate() {
-  let requestAnimationFrameId = requestAnimationFrame(animate);
+  requestAnimationFrame(animate);
+  update();
   draw();
 }
 
+function update() {
+  player.update();
+}
+
 function draw() {
+  clearCanvas();
   player.draw(ctx);
 }
 
