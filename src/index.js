@@ -2,15 +2,20 @@ import Player from "./player.js";
 
 const canvas = document.querySelector("#canvas");
 const ctx = canvas.getContext("2d");
-const player = new Player(100, 100, 50, 50);
+let player;
 
 function resizeCanvas() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 }
 
-function main() {
+function init() {
   resizeCanvas();
+  player = new Player(ctx, canvas.width / 2 - 25, canvas.height - 200, 50, 50);
+  main();
+}
+
+function main() {
   clearCanvas();
   animate();
 }
@@ -35,4 +40,5 @@ function clearCanvas() {
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
 
-onload = main;
+onload = init;
+addEventListener("resize", resizeCanvas);
