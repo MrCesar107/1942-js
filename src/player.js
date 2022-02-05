@@ -10,7 +10,18 @@ export default class Player {
     this.speedX = 0;
     this.speedY = 0;
     this.bullets = [];
-    this.canShoot = false;
+    this.canShoot;
+    this.keys = {
+      ArrowUp: false,
+      ArrowDown: false,
+      ArrowLeft: false,
+      ArrowRight: false,
+      KeyW: false,
+      KeyS: false,
+      KeyA: false,
+      KeyD: false,
+      Space: false,
+    };
   }
 
   draw() {
@@ -20,6 +31,7 @@ export default class Player {
   }
 
   update() {
+    this.keyboardHandler();
     this.move();
     this.x += this.speedX;
     this.y += this.speedY;
@@ -29,22 +41,37 @@ export default class Player {
     this.shoot();
   }
 
-  move() {
+  keyboardHandler() {
     addEventListener("keydown", (e) => {
-      if (e.code == "ArrowUp" || e.code == "KeyW") this.speedY = -5;
-      if (e.code == "ArrowDown" || e.code == "KeyS") this.speedY = 5;
-      if (e.code == "ArrowLeft" || e.code == "KeyA") this.speedX = -5;
-      if (e.code == "ArrowRight" || e.code == "KeyD") this.speedX = 5;
+      if (e.code == "ArrowUp") this.keys.ArrowUp = true;
+      if (e.code == "ArrowDown") this.keys.ArrowDown = true;
+      if (e.code == "ArrowLeft") this.keys.ArrowLeft = true;
+      if (e.code == "ArrowRight") this.keys.ArrowRight = true;
+      if (e.code == "KeyW") this.keys.KeyW = true;
+      if (e.code == "KeyS") this.keys.KeyS = true;
+      if (e.code == "KeyA") this.keys.KeyA = true;
+      if (e.code == "KeyD") this.keys.KeyD = true;
       if (e.code == "Space") this.canShoot = false;
     });
 
     addEventListener("keyup", (e) => {
-      if (e.code == "ArrowUp" || e.code == "KeyW") this.speedY = 0;
-      if (e.code == "ArrowDown" || e.code == "KeyS") this.speedY = 0;
-      if (e.code == "ArrowLeft" || e.code == "KeyA") this.speedX = 0;
-      if (e.code == "ArrowRight" || e.code == "KeyD") this.speedX = 0;
+      if (e.code == "ArrowUp") this.keys.ArrowUp = false;
+      if (e.code == "ArrowDown") this.keys.ArrowDown = false;
+      if (e.code == "ArrowLeft") this.keys.ArrowLeft = false;
+      if (e.code == "ArrowRight") this.keys.ArrowRight = false;
+      if (e.code == "KeyW") this.keys.KeyW = false;
+      if (e.code == "KeyS") this.keys.KeyS = false;
+      if (e.code == "KeyA") this.keys.KeyA = false;
+      if (e.code == "KeyD") this.keys.KeyD = false;
       if (e.code == "Space") this.canShoot = true;
     });
+  }
+
+  move() {
+    if (this.keys.ArrowUp || this.keys.KeyW) this.y -= 5;
+    if (this.keys.ArrowDown || this.keys.KeyS) this.y += 5;
+    if (this.keys.ArrowLeft || this.keys.KeyA) this.x -= 5;
+    if (this.keys.ArrowRight || this.keys.KeyD) this.x += 5;
   }
 
   checkCollisions() {
@@ -69,8 +96,8 @@ export default class Player {
       this.bullets.push(
         new Bullet(this.ctx, this.x + this.width / 2, this.y, 5, 25, "player")
       );
-
-      this.canShoot = false;
     }
+
+    this.canShoot = false;
   }
 }
