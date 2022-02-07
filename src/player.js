@@ -1,3 +1,4 @@
+import GamepadHelper from "./utils/gamepadhelper.js";
 import Bullet from "./bullet.js";
 
 export default class Player {
@@ -22,6 +23,14 @@ export default class Player {
       KeyD: false,
       Space: false,
     };
+    this.gamepadButtons = {
+      ArrowUp: false,
+      ArrowDown: false,
+      ArrowLeft: false,
+      ArrowRight: false,
+      Button0: false,
+    };
+    this.gamepadHelper = new GamepadHelper();
   }
 
   draw() {
@@ -32,6 +41,8 @@ export default class Player {
 
   update() {
     this.keyboardHandler();
+    this.gamepadHelper.update();
+    this.gamepadHandler();
     this.move();
     this.x += this.speedX;
     this.y += this.speedY;
@@ -67,11 +78,47 @@ export default class Player {
     });
   }
 
+  gamepadHandler() {
+    document.addEventListener("gampadbuttondown", (event) => {
+      if (event.detail.gamepad == 0 && event.detail.button === 12)
+        this.gamepadButtons.ArrowUp = true;
+      if (event.detail.gamepad == 0 && event.detail.button === 13)
+        this.gamepadButtons.ArrowDown = true;
+      if (event.detail.gamepad == 0 && event.detail.button === 14)
+        this.gamepadButtons.ArrowLeft = true;
+      if (event.detail.gamepad == 0 && event.detail.button === 15)
+        this.gamepadButtons.ArrowRight = true;
+      if (event.detail.gamepad == 0 && event.detail.button === 0)
+        this.canShoot = false;
+    });
+
+    document.addEventListener("gampadbuttonup", (event) => {
+      if (event.detail.gamepad == 0 && event.detail.button === 12)
+        this.gamepadButtons.ArrowUp = false;
+      if (event.detail.gamepad == 0 && event.detail.button === 13)
+        this.gamepadButtons.ArrowDown = false;
+      if (event.detail.gamepad == 0 && event.detail.button === 14)
+        this.gamepadButtons.ArrowLeft = false;
+      if (event.detail.gamepad == 0 && event.detail.button === 15)
+        this.gamepadButtons.ArrowRight = false;
+      if (event.detail.gamepad == 0 && event.detail.button === 0)
+        this.canShoot = true;
+    });
+  }
+
   move() {
-    if (this.keys.ArrowUp || this.keys.KeyW) this.y -= 5;
-    if (this.keys.ArrowDown || this.keys.KeyS) this.y += 5;
-    if (this.keys.ArrowLeft || this.keys.KeyA) this.x -= 5;
-    if (this.keys.ArrowRight || this.keys.KeyD) this.x += 5;
+    if (this.keys.ArrowUp || this.keys.KeyW || this.gamepadButtons.ArrowUp)
+      this.y -= 5;
+    if (this.keys.ArrowDown || this.keys.KeyS || this.gamepadButtons.ArrowDown)
+      this.y += 5;
+    if (this.keys.ArrowLeft || this.keys.KeyA || this.gamepadButtons.ArrowLeft)
+      this.x -= 5;
+    if (
+      this.keys.ArrowRight ||
+      this.keys.KeyD ||
+      this.gamepadButtons.ArrowRight
+    )
+      this.x += 5;
   }
 
   checkCollisions() {
