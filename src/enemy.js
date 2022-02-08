@@ -7,6 +7,8 @@ export default class Enemy {
     this.height = height;
   }
 
+  update() {}
+
   draw() {
     this.ctx.fillStyle = "#ffff00";
     this.ctx.fillRect(this.x, this.y, this.width, this.height);
