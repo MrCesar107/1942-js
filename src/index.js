@@ -59,7 +59,7 @@ function draw() {
 }
 
 function clearCanvas() {
-  ctx.fillStyle = "black";
+  ctx.fillStyle = "#045c84";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
 
